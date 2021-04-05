@@ -16,9 +16,10 @@ int main(int argc, char const *argv[])
     int addrlen = sizeof(address);
     char buffer[102] = {0};
     char *hello = "Hello from server";
+    pid_t wpid;
+    int status = 0;
 
     printf("execve=0x%p\n", execve);
-    setuid(32767);
 
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -45,6 +46,17 @@ int main(int argc, char const *argv[])
         perror("bind failed");
         exit(EXIT_FAILURE);
     }
+
+    if (fork()==0) {
+        // CHILD: drop privileges. set to NOBODY user.
+        setuid(32767);
+    }
+    else {
+        // PARENT: wait for child to exit, then exit.
+        while((wpid = wait(&status)) > 0);
+        exit(0);
+    }
+ 
     if (listen(server_fd, 3) < 0)
     {
         perror("listen");
