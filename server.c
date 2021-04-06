@@ -16,7 +16,7 @@ int main(int argc, char const *argv[])
     int addrlen = sizeof(address);
     char buffer[102] = {0};
     char *hello = "Hello from server";
-    pid_t child_pid, wpid;
+    pid_t pid, wpid;
     int status = 0;
 
     printf("execve=0x%p\n", execve);
@@ -47,14 +47,14 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
-    child_pid = fork();
+    pid = fork();
 
-    if (child_pid < 0) {
+    if (pid < 0) {
         perror("fork failed");
         exit(EXIT_FAILURE);
     }
 
-    if (child_pid > 0) {
+    if (pid > 0) {
         // PARENT: wait for child to exit, then exit.
         while((wpid = wait(&status)) > 0);
         exit(0);
