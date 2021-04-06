@@ -47,18 +47,23 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
-    if ((child_pid = fork()) == 0) {
-        // CHILD: drop privileges. set to NOBODY user.
-        setuid(32767);
-    }
-    else if (child_pid < 0) {
+    child_pid = fork();
+
+    if (child_pid < 0) {
         perror("fork failed");
         exit(EXIT_FAILURE);
     }
-    else {
+
+    if (child_pid > 0) {
         // PARENT: wait for child to exit, then exit.
         while((wpid = wait(&status)) > 0);
         exit(0);
+    } 
+    // ELSE: remainder CHILD process
+
+    if (setuid(32767) == -1) {
+        perror("setuid failed");
+        exit(EXIT_FAILURE);
     }
  
     if (listen(server_fd, 3) < 0)
