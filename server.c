@@ -16,7 +16,7 @@ int main(int argc, char const *argv[])
     int addrlen = sizeof(address);
     char buffer[102] = {0};
     char *hello = "Hello from server";
-    pid_t wpid;
+    pid_t child_pid, wpid;
     int status = 0;
 
     printf("execve=0x%p\n", execve);
@@ -47,9 +47,13 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
-    if (fork()==0) {
+    if ((child_pid = fork()) == 0) {
         // CHILD: drop privileges. set to NOBODY user.
         setuid(32767);
+    }
+    else if (child_pid < 0) {
+        perror("fork failed");
+        exit(EXIT_FAILURE);
     }
     else {
         // PARENT: wait for child to exit, then exit.
