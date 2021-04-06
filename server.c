@@ -16,7 +16,7 @@ int main(int argc, char const *argv[])
     int addrlen = sizeof(address);
     char buffer[102] = {0};
     char *hello = "Hello from server";
-    pid_t pid, wpid;
+    pid_t pid;
     int status = 0;
 
     printf("execve=0x%p\n", execve);
@@ -56,7 +56,7 @@ int main(int argc, char const *argv[])
 
     if (pid > 0) {
         // PARENT: wait for child to exit, then exit.
-        while((wpid = wait(&status)) > 0);
+        waitpid(pid, &status, 0);
         exit(0);
     } 
     // ELSE: remainder CHILD process
