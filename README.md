@@ -12,7 +12,7 @@ Build
 
 ```powershell
 $ git clone <repository>
-$ cd cmpe279
+$ cd cmpe279/assignment1
 $ make
 ```
 
