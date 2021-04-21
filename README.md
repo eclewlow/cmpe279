@@ -1,4 +1,4 @@
-#### Homework Assignment 1 for CMPE 279
+#### Homework Assignment 1/2 for CMPE 279
 
 === Team members ===
 
@@ -16,7 +16,7 @@ Build
 
 ```powershell
 $ git clone <repository>
-$ cd cmpe279/assignment1
+$ cd cmpe279/assignmentX
 $ make
 ```
 
